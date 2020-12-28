@@ -1,41 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 //import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// const App = (props) => {
-//   // const [count, setCount] = useState(props.count);
-//   // const [text, setText] = useState('');
-//   const [state, setState] = useState({
-//     count: props.count,
-//     text: '',
-//   });
-
-//   return (
-//     <div>
-//       <p>
-//         Current count is {state.text || 'count'} is {state.count}
-//       </p>
-//       <button onClick={() => setState({ ...state, count: state.count + 1 })}>
-//         +1
-//       </button>
-//       <button onClick={() => setState({ ...state, count: state.count - 1 })}>
-//         -1
-//       </button>
-//       <button onClick={() => setState({ ...state, count: state.count })}>
-//         Reset
-//       </button>
-//       <input
-//         value={state.text}
-//         onChange={(e) => setState({ text: e.target.value })}
-//       />
-//     </div>
-//   );
-// };
-
 const NoteApp = () => {
-  const [notes, setNotes] = useState([]);
+  const notesData = JSON.parse(localStorage.getItem('notes'));
+  const [notes, setNotes] = useState(notesData || []);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
@@ -49,6 +20,10 @@ const NoteApp = () => {
   const removeNote = (title) => {
     setNotes(notes.filter((note) => note.title !== title));
   };
+
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  });
 
   return (
     <div>
@@ -77,14 +52,19 @@ const App = (props) => {
   const [count, setCount] = useState(props.count);
   const [text, setText] = useState('');
 
+  useEffect(() => {
+    console.log('useEffect ran');
+    document.title = count;
+  });
+
   return (
     <div>
       <p>
-        Current count is {text || 'count'} is {count}
+        The current {text || 'count'} is {count}
       </p>
-      <button onClick={() => setCount(count + 1)}>+1</button>
       <button onClick={() => setCount(count - 1)}>-1</button>
-      <button onClick={() => setCount(props.count)}>Reset</button>
+      <button onClick={() => setCount(props.count)}>reset</button>
+      <button onClick={() => setCount(count + 1)}>+1</button>
       <input value={text} onChange={(e) => setText(e.target.value)} />
     </div>
   );
